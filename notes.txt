@@ -1,0 +1,5 @@
+rivanna$ python booklover_test.py
+
+Look at the output and make sure your tests are working and your code passes the test. When you are ready, output the test results to the third file as follows:
+
+rivanna$ python booklover_test.py 2> booklover_results.txt
