@@ -1,133 +1,120 @@
 import numpy as np
 import pandas as pd
 
+    # test function, needs to throw type error if not a NumPy Array
+
 class Die:
-    def __init__(self, N, W=None, is_coin=False):
+
+    """
+    A class, changing faces and weights.
+
+    Attributes:
+    - faces (np.array): Array of faces of the die.
+    - _data (pd.DataFrame): Private data frame that stores the die weights.
+    """
+    def __init__(self, faces):
         """
-        A class representing a die.
+        Initializes a Die with face data.
 
         Args:
-        - N (np.array): NumPy array of faces of the die.
-        - W (np.array, optional): NumPy array of weights for each face.
-        - is_coin (bool, optional): Boolean indicating if the die is a coin.
-        
-        Raises:
-        - TypeError: If N is not a NumPy array.
-        - ValueError: If N values are not unique.
+        - faces (np.array): Array of faces of the die..
+
+        Raised errors:
+        - TypeError: Throws a TypeError if not a Numpy array.
+        - ValueError: Test to see if the values are distinct and raise ValueError if not.
         """
-        if not isinstance(N, np.ndarray):
-            raise TypeError("N must be a NumPy array.")
+        if not isinstance(faces, np.ndarray):
+            raise TypeError("Not a Numpy Array!!")
 
-        if len(N) != len(np.unique(N)):
-            raise ValueError("N values must be unique.")
+        if len(faces) != len(np.unique(faces)):
+            raise ValueError("Faces values must be unique!!")
 
-        if W is None:
-            W = np.ones(len(N))
-        else:
-            if len(W) != len(N):
-                raise ValueError("Weights must have the same length as faces.")
-            if any(weight < 0 for weight in W):
-                raise ValueError("Weights must be non-negative.")
-
-        self._data = pd.DataFrame({'weights': W}, index=N)
-        self.is_coin = is_coin
-
+        self._data = pd.DataFrame({'weights': [1.0]*len(faces)}, index=faces)
+        
     def change_weight(self, face, new_weight):
         """
-        Changes the weight of a single side.
+        A method to change the weight of a single side.
 
         Args:
-        - face: Face value to be changed.
-        - new_weight: The weight of the face value that was changed.
+        - face: face value to be changed.
+        - new_weight: the weight of face value that was changed.
 
         Raises:
         - IndexError: If the face value is not valid.
-        - TypeError: If the weight is not a non-negative number.
+        - TypeError: If weight is not numeric (interger or float) or castable numeric.
         """
         if face not in self._data.index:
-            raise IndexError("Face value not valid.")
+            raise IndexError("Face value not valid!!")
 
-        if not (isinstance(new_weight, (int, float)) and new_weight >= 0):
-            raise TypeError("Weight value is not a non-negative number.")
+        if not (isinstance(new_weight, (int, float)) or str(new_weight).isnumeric()):
+            raise TypeError("Weight value is not numeric!!")
 
         self._data.loc[face, 'weights'] = new_weight
-
+        
     def roll(self, times=1):
         """
-        Simulates rolling the die one or more times.
+        method to roll the die one or more times.
 
         Args:
-        - times: How many times the die should be rolled (default is 1).
+        - how many times the die is to be rolled; defaults to  1
 
         Returns:
-        - A list of outcomes.
+        - Returns a Python list of outcomes.
         """
-        if self.is_coin:
-            if len(self._data) != 2:
-                raise ValueError("A coin must have exactly 2 faces.")
-        return np.random.choice(
-            self._data.index,
-            size=times,
-            p=self._data['weights'] / np.sum(self._data['weights'])
-        ).tolist()
-
+        ##not to internally store results
+        return np.random.choice(self._data.index, size=times, p=self._data['weights']/np.sum(self._data['weights'])).tolist()
+    
     def show_state(self):
         """
-        Shows the current state of the die.
+        Dies current state
 
         Returns:
-        - A copy of the private die data frame.
+        - Returns a copy of the private die data frame.
         """
-        return self._data.copy()
-
+        return self._data.copy()      
+        
+#Game Class
 class Game:
+    """
+    A game consists of rolling of one or more similar dice (Die objects) one or more times
+
+    Attributes:
+    - list of already instantiated similar dice.
+    """
+    ##Takes a single parameter, a list of already instantiated similar dice
     def __init__(self, dice_list):
         """
-        A class representing a game of rolling one or more dice.
+        Initializes a Die with face data. Takes a single parameter, a list of already instantiated similar dice
 
         Args:
-        - dice_list (list): List of already instantiated similar dice.
-
-        Raises:
-        - ValueError: If the list does not contain Die objects or if the dice do not have the same faces.
+        - takes a single parameter, a list of already instantiated similar dice.
         """
-        if not all(isinstance(die, Die) for die in dice_list):
-            raise ValueError("The list must contain Die objects.")
-
-        face_lengths = [len(die._data) for die in dice_list]
-        if not all(length == face_lengths[0] for length in face_lengths):
-            raise ValueError("All dice must have the same number of faces.")
-
         self.dice_list = dice_list
         self._data = None
-
+        
+##play method how many times dice should be rolled 
     def play(self, times):
         """
-        Simulates playing the game by rolling the dice a specified number of times.
+       play method how many times dice should be rolled
 
         Args:
-        - times (int): Number of times the dice should be rolled.
-
-        Returns:
-        - None
+        - interger parameter how many times dice should be rolled. 
         """
         results = {}
         for idx, die in enumerate(self.dice_list):
             results[f'die_{idx}'] = die.roll(times)
         self._data = pd.DataFrame(results)
-
+        
+##results of most recent play
     def show_results(self, form='wide'):
         """
-        Shows the results of the most recent play.
+        results of most recent play
 
         Args:
-        - form (str): Parameter to return the data frame in narrow or wide form (defaults to wide form).
-
-        Returns:
-        - A copy of the private play data frame in the specified form.
+        - Takes a parameter to return the data frame in narrow or wide form which defaults to wide form.
 
         Raises:
-        - ValueError: If the user passes an invalid option for narrow or wide.
+        - ValueError:if the user passes an invalid option for narrow or wide.
         """
         if form == 'wide':
             if self._data is None:
@@ -139,65 +126,89 @@ class Game:
             else:
                 return self._data.melt(ignore_index=False, var_name='die_number', value_name='outcomes')
         else:
-            raise ValueError("Invalid option passed, choose 'wide' or 'narrow'.")   
+            raise ValueError("Invalid option passed, choose 'wide' or 'narrow'!!")
 
+##Analyzer class, Throw a ValueError if the passed value is not a Game object
 class Analyzer:
+    """
+    An Analyzer object takes the results of a single game and computes various descriptive statistical properties about it.
+
+    Attributes:
+    - game object as parameter
+    
+    Raises:
+    ValueError:  if the passed value is not a Game object
+    """
     def __init__(self, game):
         """
-        A class representing an Analyzer object that analyzes the results of a single game.
+        Takes a game object as its input parameter. Throw a ValueError if the passed value is not a Game object.
 
-        Args:
-        - game (Game): The input game object.
-
+        Attributes:
+        - game object as parameter
+    
         Raises:
-        - ValueError: If the passed value is not a Game object.
+        ValueError:  if the passed value is not a Game object
         """
         if not isinstance(game, Game):
             raise ValueError("Passed value is not a Game Object!!")
         self.game = game
-
+        
+    ##jackpot method
     def jackpot(self):
         """
-        Computes the number of jackpots in the game.
+        A jackpot is a result in which all faces are the same, e.g. all ones for a six-sided die.
+
+        Args:
+        - Computes how many times the game resulted in a jackpot.
 
         Returns:
-        - An integer for the number of jackpots.
+        -Returns an integer for the number of jackpots.
         """
         data = self.game.show_results()
         jackpots = (data == data.iloc[:, 0]).all(axis=1).sum()
         return jackpots
-
+    
+    ##facecounts method
     def face_counts_per_roll(self):
         """
-        Computes the number of times a given face is rolled in each event.
+        Computes how many times a given face is rolled in each event.
+
+        Functions
+        The data frame has an index of the roll number, face values as columns, and count values in the cells (i.e. it is in wide format)
 
         Returns:
-        - A data frame of results in wide format.
+        -Returns a data frame of results.
         """
         data = self.game.show_results()
         counts = data.apply(pd.Series.value_counts)
+        #may need to fix for Nan
         return counts
 
+    ##A combo count method
     def combo_count(self):
         """
         Computes the distinct combinations of faces rolled, along with their counts.
 
+        Combinations are order-independent and may contain repetitions.
+
         Returns:
-        - A data frame of results with distinct combinations and associated counts.
+        -Returns a data frame of results.
         """
         data = self.game.show_results()
         combos = data.apply(lambda row: tuple(row), axis=1).value_counts()
         return pd.DataFrame(combos, columns=['counts'])
-
+    
+    ##An permutation count method
     def permutation_count(self):
         """
         Computes the distinct permutations of faces rolled, along with their counts.
 
+        The data frame should have a MultiIndex of distinct permutations and a column for the associated counts
+
         Returns:
-        - A data frame of results with distinct permutations and associated counts.
+        -Returns a data frame of results.
         """
         data = self.game.show_results()
         perms = data.apply(lambda row: ''.join(map(str, row)), axis=1).value_counts()
         return pd.DataFrame(perms, columns=['counts'])
-
 
