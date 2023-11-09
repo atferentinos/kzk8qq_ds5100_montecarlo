@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 import numpy as np
 
-from montecarlo import Die, Game, Analyzer
+from Demo.montecarlo import Die, Game, Analyzer
 
 class TestDieMethods(unittest.TestCase):
     def test_init_die(self):
