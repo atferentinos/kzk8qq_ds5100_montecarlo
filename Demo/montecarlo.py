@@ -164,9 +164,7 @@ class Analyzer:
         Returns:
         -Returns an integer for the number of jackpots.
         """
-        data = self.game.show_results()
-        jackpots = (data == data.iloc[:, 0]).all(axis=1).sum()
-        return jackpots
+        return self.game.show_results().eq(self.game.show_results().iloc[:, 0], axis=0).all(1).sum()
     
     ##facecounts method
     def face_counts_per_roll(self):
