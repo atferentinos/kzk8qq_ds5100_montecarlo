@@ -8,13 +8,13 @@ class TestDieMethods(unittest.TestCase):
     def test_init_die(self):
         test_faces = np.array([1, 2, 3, 4, 5, 6])
         die = Die(test_faces)
-        self.assertIsInstance(die.show_state(), pd.DataFrame)
+        self.assertIsInstance(die.current_state(), pd.DataFrame)
         
     def test_change_weight(self):
         test_faces = np.array([1, 2, 3, 4, 5, 6])
         die = Die(test_faces)
         die.change_weight(1, 2.5)
-        self.assertEqual(die.show_state().loc[1, 'weights'], 2.5)
+        self.assertEqual(die.current_state().loc[1, 'weights'], 2.5)
         
     def test_roll(self):
         test_faces = np.array([1, 2, 3, 4, 5, 6])
@@ -22,10 +22,10 @@ class TestDieMethods(unittest.TestCase):
         outcomes = die.roll(10)
         self.assertEqual(len(outcomes), 10)
         
-    def test_show_state(self):
+    def test_current_state(self):
         test_faces = np.array([1, 2, 3, 4, 5, 6])
         die = Die(test_faces)
-        state = die.show_state()
+        state = die.current_state()
         self.assertIsInstance(state, pd.DataFrame)
 
 class TestGameMethods(unittest.TestCase):
@@ -34,7 +34,7 @@ class TestGameMethods(unittest.TestCase):
         die1 = Die(test_faces)
         die2 = Die(test_faces)
         game = Game([die1, die2])
-        self.assertIsInstance(game.dice_list, list)
+        self.assertIsInstance(game.dies, list)
         
     def test_play(self):
         test_faces = np.array([1, 2, 3, 4, 5, 6])
@@ -42,15 +42,15 @@ class TestGameMethods(unittest.TestCase):
         die2 = Die(test_faces)
         game = Game([die1, die2])
         game.play(5)
-        self.assertIsNotNone(game.show_results())
+        self.assertIsNotNone(game.play_results())
         
-    def test_show_results(self):
+    def test_play_results(self):
         test_faces = np.array([1, 2, 3, 4, 5, 6])
         die1 = Die(test_faces)
         die2 = Die(test_faces)
         game = Game([die1, die2])
         game.play(5)
-        results = game.show_results()
+        results = game.play_results()
         self.assertIsInstance(results, pd.DataFrame)
 
 class TestAnalyzerMethods(unittest.TestCase):
@@ -62,24 +62,24 @@ class TestAnalyzerMethods(unittest.TestCase):
         game.play(5)
         analyzer = Analyzer(game)
         
-    def test_combo_count(self):
+    def test_combo_faces(self):
         test_faces = np.array([1, 2, 3, 4, 5, 6])
         die1 = Die(test_faces)
         die2 = Die(test_faces)
         game = Game([die1, die2])
         game.play(5)
         analyzer = Analyzer(game)
-        combos = analyzer.combo_count()
+        combos = analyzer.combo_faces()
         self.assertIsInstance(combos, pd.DataFrame)
         
-    def test_face_counts_per_roll(self):
+    def test_rolled_event(self):
         test_faces = np.array([1, 2, 3, 4, 5, 6])
         die1 = Die(test_faces)
         die2 = Die(test_faces)
         game = Game([die1, die2])
         game.play(5)
         analyzer = Analyzer(game)
-        counts = analyzer.face_counts_per_roll()
+        counts = analyzer.rolled_event()
         self.assertIsInstance(counts, pd.DataFrame)
         
     def test_permutation_count(self):
@@ -89,7 +89,7 @@ class TestAnalyzerMethods(unittest.TestCase):
         game = Game([die1, die2])
         game.play(5)
         analyzer = Analyzer(game)
-        perms = analyzer.permutation_count()
+        perms = analyzer.distinct_permutations()
         self.assertIsInstance(perms, pd.DataFrame)
         
 if __name__ == '__main__':

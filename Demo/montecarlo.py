@@ -12,7 +12,7 @@ class Die:
     - faces (np.array): Array of faces of the die.
     - _data (pd.DataFrame): Private data frame that stores the die weights.
     """
-    def __init__(self, faces):
+    def __init__(self, N):
         """
         Initializes a Die with face data.
 
@@ -23,15 +23,15 @@ class Die:
         - TypeError: Throws a TypeError if not a Numpy array.
         - ValueError: Test to see if the values are distinct and raise ValueError if not.
         """
-        if not isinstance(faces, np.ndarray):
+        if not isinstance(N, np.ndarray):
             raise TypeError("Not a Numpy Array!!")
 
-        if len(faces) != len(np.unique(faces)):
+        if len(N) != len(np.unique(N)):
             raise ValueError("Faces values must be unique!!")
 
-        self._data = pd.DataFrame({'weights': [1.0]*len(faces)}, index=faces)
+        self._data = pd.DataFrame({'weights': [1.0]*len(N)}, index=N)
         
-    def change_weight(self, face, new_weight):
+    def change_weight(self, N, new_weight):
         """
         A method to change the weight of a single side.
 
@@ -43,15 +43,15 @@ class Die:
         - IndexError: If the face value is not valid.
         - TypeError: If weight is not numeric (interger or float) or castable numeric.
         """
-        if face not in self._data.index:
+        if N not in self._data.index:
             raise IndexError("Face value not valid!!")
 
         if not (isinstance(new_weight, (int, float)) or str(new_weight).isnumeric()):
             raise TypeError("Weight value is not numeric!!")
 
-        self._data.loc[face, 'weights'] = new_weight
+        self._data.loc[N, 'weights'] = new_weight
         
-    def roll(self, times=1):
+    def roll(self, rolls=1):
         """
         method to roll the die one or more times.
 
@@ -62,9 +62,9 @@ class Die:
         - Returns a Python list of outcomes.
         """
         ##not to internally store results
-        return np.random.choice(self._data.index, size=times, p=self._data['weights']/np.sum(self._data['weights'])).tolist()
+        return np.random.choice(self._data.index, size=rolls, p=self._data['weights']/np.sum(self._data['weights'])).tolist()
     
-    def show_state(self):
+    def current_state(self):
         """
         Dies current state
 
@@ -82,18 +82,18 @@ class Game:
     - list of already instantiated similar dice.
     """
     ##Takes a single parameter, a list of already instantiated similar dice
-    def __init__(self, dice_list):
+    def __init__(self, dies):
         """
         Initializes a Die with face data. Takes a single parameter, a list of already instantiated similar dice
 
         Args:
         - takes a single parameter, a list of already instantiated similar dice.
         """
-        self.dice_list = dice_list
+        self.dies = dies
         self._data = None
         
 ##play method how many times dice should be rolled 
-    def play(self, times):
+    def play(self, rolls):
         """
        play method how many times dice should be rolled
 
@@ -101,12 +101,12 @@ class Game:
         - interger parameter how many times dice should be rolled. 
         """
         results = {}
-        for idx, die in enumerate(self.dice_list):
-            results[f'die_{idx}'] = die.roll(times)
+        for idx, die in enumerate(self.dies):
+            results[f'die_{idx}'] = die.roll(rolls)
         self._data = pd.DataFrame(results)
         
 ##results of most recent play
-    def show_results(self, form='wide'):
+    def play_results(self, form='wide'):
         """
         results of most recent play
 
@@ -164,10 +164,10 @@ class Analyzer:
         Returns:
         -Returns an integer for the number of jackpots.
         """
-        return self.game.show_results().eq(self.game.show_results().iloc[:, 0], axis=0).all(1).sum()
+        return self.game.play_results().eq(self.game.play_results().iloc[:, 0], axis=0).all(1).sum()
     
     ##facecounts method
-    def face_counts_per_roll(self):
+    def rolled_event(self):
         """
         Computes how many times a given face is rolled in each event.
 
@@ -177,13 +177,13 @@ class Analyzer:
         Returns:
         -Returns a data frame of results.
         """
-        data = self.game.show_results()
+        data = self.game.play_results()
         counts = data.apply(pd.Series.value_counts)
         #may need to fix for Nan
         return counts
 
     ##A combo count method
-    def combo_count(self):
+    def combo_faces(self):
         """
         Computes the distinct combinations of faces rolled, along with their counts.
 
@@ -192,12 +192,12 @@ class Analyzer:
         Returns:
         -Returns a data frame of results.
         """
-        data = self.game.show_results()
+        data = self.game.play_results()
         combos = data.apply(lambda row: tuple(row), axis=1).value_counts()
         return pd.DataFrame(combos, columns=['counts'])
     
     ##An permutation count method
-    def permutation_count(self):
+    def distinct_permutations(self):
         """
         Computes the distinct permutations of faces rolled, along with their counts.
 
@@ -206,7 +206,7 @@ class Analyzer:
         Returns:
         -Returns a data frame of results.
         """
-        data = self.game.show_results()
+        data = self.game.play_results()
         perms = data.apply(lambda row: ''.join(map(str, row)), axis=1).value_counts()
         return pd.DataFrame(perms, columns=['counts'])
 
