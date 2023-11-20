@@ -1,16 +1,16 @@
 test_analyzer (__main__.TestAnalyzerMethods) ... ok
-test_combo_count (__main__.TestAnalyzerMethods) ... ok
-test_face_counts_per_roll (__main__.TestAnalyzerMethods) ... ok
+test_combo_faces (__main__.TestAnalyzerMethods) ... ok
 test_permutation_count (__main__.TestAnalyzerMethods) ... ok
+test_rolled_event (__main__.TestAnalyzerMethods) ... ok
 test_change_weight (__main__.TestDieMethods) ... ok
+test_current_state (__main__.TestDieMethods) ... ok
 test_init_die (__main__.TestDieMethods) ... ok
 test_roll (__main__.TestDieMethods) ... ok
-test_show_state (__main__.TestDieMethods) ... ok
 test_init_game (__main__.TestGameMethods) ... ok
 test_play (__main__.TestGameMethods) ... ok
-test_show_results (__main__.TestGameMethods) ... ok
+test_play_results (__main__.TestGameMethods) ... ok
 
 ----------------------------------------------------------------------
-Ran 11 tests in 0.045s
+Ran 11 tests in 0.040s
 
 OK
