@@ -1,14 +1,9 @@
-# kzk8qq_ds5100_montecarlo
-DS5100 Final Project 
-# Alexandra Ferentinos Monte Carlo Simulator
 
-## Metadata
-- **Author:** Alexandra Ferentinos
-- **Project:** Monte Carlo Simulator, Fall 2023 DS5100
+# Alexandra Ferentinos MonteCarlo Simulation 
 
-## Synopsis
+This project is for the DS5100 UVA graduate course final project and deliverables. This project implements a simple Monte Carlo simulator using a set of three related classes -- a Die Class, a Game Class, and an Analyzer class. 
 
-```python
+
 # Installation, once in file path 
 !pip install -e .
 # Defaulting to user installation because normal site-packages is not writeable
@@ -32,36 +27,7 @@ Installing collected packages: Demo
   Running setup.py develop for Demo
 Successfully installed Demo
 
-# Import
-import numpy as np
-import pandas as pd 
-from Demo.montecarlo import Die, Game, Analyzer
-
-# 1: Create Dice example
-faces = np.array([1, 2, 3, 4, 5, 6])
-my_die = Die(faces)
-
-# weight change of face
-my_die.change_weight(1, 0.5)
-
-# Roll the die
-outcomes = my_die.roll(10)
-
-# Create game with multiple dice
-dice_list = [Die(np.array([1, 2, 3, 4, 5, 6])) for _ in range(3)]
-my_game = Game(dice_list)
-
-# 2: Play a Game example 
-my_game.play(11)
-
-# 3: Analyze a Game example 
-analyzer = Analyzer(my_game)
-jackpot_count = analyzer.jackpot()
-rolled_event_counts = analyzer.rolled_event()
-combo_faces_counts = analyzer.combo_faces()
-distinct_permutations_counts = analyzer.distinct_permutations()
-
-## API Description
+   ## API Description/Synopsis
 
 ### Die Class
 
@@ -158,3 +124,13 @@ distinct_permutations_counts = analyzer.distinct_permutations()
 
   ##### Returns:
   - pd.DataFrame: Data frame of results.
+
+
+## Running Tests
+
+To run tests, run the following command
+
+```bash
+  python montecarlo_test.py 2> montecarlo_results.txt
+```
+
