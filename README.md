@@ -1,44 +1,33 @@
 
 # Alexandra Ferentinos MonteCarlo Simulation 
 
-This project is for the DS5100 UVA graduate course final project and deliverables. This project is the culimation of DS5100 course work, emphasizing the following: Basic syntax, expressions, and statements in Python. Python Classes with initialization methods. Data manipulation with Numpy and Pands. Literate programming with docstrings and documentation. Unit testing with Unittest. Simple plotting with Pandas. Program modularization and packaging with setuptools. GitHub for managing and sharing code.  This project implements a simple Monte Carlo simulator using a set of three related classes -- a Die Class, a Game Class, and an Analyzer class. 
+This project is for the DS5100 UVA graduate course final project and deliverables. This project implements a simple Monte Carlo simulator using a set of three related classes -- a Die Class, a Game Class, and an Analyzer class. 
 
 
 # Installation, once in file path 
-pip install -e .
-    
-## Demo
+!pip install -e .
+# Defaulting to user installation because normal site-packages is not writeable
+Obtaining file:///sfs/qumulo/qhome/kzk8qq/Documents/MSDS/DS5100/kzk8qq_ds5100_montecarlo
+Requirement already satisfied: pandas in /sfs/applications/202307/software/standard/compiler/gcc/9.2.0/jupyter_conda/2020.11-py3.8/lib/python3.8/site-packages (from Demo==0.1) (1.1.3)
+Requirement already satisfied: numpy in /sfs/applications/202307/software/standard/compiler/gcc/9.2.0/jupyter_conda/2020.11-py3.8/lib/python3.8/site-packages (from Demo==0.1) (1.19.2)
+Requirement already satisfied: matplotlib in /sfs/applications/202307/software/standard/compiler/gcc/9.2.0/jupyter_conda/2020.11-py3.8/lib/python3.8/site-packages (from Demo==0.1) (3.3.2)
+Requirement already satisfied: python-dateutil>=2.7.3 in /sfs/applications/202307/software/standard/compiler/gcc/9.2.0/jupyter_conda/2020.11-py3.8/lib/python3.8/site-packages (from pandas->Demo==0.1) (2.8.1)
+Requirement already satisfied: pytz>=2017.2 in /sfs/applications/202307/software/standard/compiler/gcc/9.2.0/jupyter_conda/2020.11-py3.8/lib/python3.8/site-packages (from pandas->Demo==0.1) (2020.1)
+Requirement already satisfied: kiwisolver>=1.0.1 in /sfs/applications/202307/software/standard/compiler/gcc/9.2.0/jupyter_conda/2020.11-py3.8/lib/python3.8/site-packages (from matplotlib->Demo==0.1) (1.3.0)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.3 in /sfs/applications/202307/software/standard/compiler/gcc/9.2.0/jupyter_conda/2020.11-py3.8/lib/python3.8/site-packages (from matplotlib->Demo==0.1) (2.4.7)
+Requirement already satisfied: certifi>=2020.06.20 in /sfs/applications/202307/software/standard/compiler/gcc/9.2.0/jupyter_conda/2020.11-py3.8/lib/python3.8/site-packages (from matplotlib->Demo==0.1) (2021.10.8)
+Requirement already satisfied: pillow>=6.2.0 in /sfs/applications/202307/software/standard/compiler/gcc/9.2.0/jupyter_conda/2020.11-py3.8/lib/python3.8/site-packages (from matplotlib->Demo==0.1) (8.0.1)
+Requirement already satisfied: cycler>=0.10 in /sfs/applications/202307/software/standard/compiler/gcc/9.2.0/jupyter_conda/2020.11-py3.8/lib/python3.8/site-packages (from matplotlib->Demo==0.1) (0.10.0)
+Requirement already satisfied: six>=1.5 in /sfs/applications/202307/software/standard/compiler/gcc/9.2.0/jupyter_conda/2020.11-py3.8/lib/python3.8/site-packages (from python-dateutil>=2.7.3->pandas->Demo==0.1) (1.15.0)
+Installing collected packages: Demo
+  Attempting uninstall: Demo
+    Found existing installation: Demo 0.1
+    Uninstalling Demo-0.1:
+      Successfully uninstalled Demo-0.1
+  Running setup.py develop for Demo
+Successfully installed Demo
 
-```python
-from Demo.montecarlo import Die, Game, Analyzer
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-test_faces = np.array([1, 2, 3, 4, 5, 6])
-die1 = Die(test_faces)
-die2 = Die(test_faces)
-die2.change_weight(1,2)
-print(die2.roll())
-die2.roll()
-game = Game([die1, die2])
-game.play(5)
-print(game.play_results())
-analyzer = Analyzer(game)
-amount_jackpots = analyzer.jackpot()
-counts = analyzer.face_counts()
-combos = analyzer.combo_faces()
-perms = analyzer.distinct_permutations()
-print(amount_jackpots)
-print(counts)
-print(combos)
-print(perms)
-```
-
-
-
-
-## API Description
+   ## API Description/Synopsis
 
 ### Die Class
 
@@ -137,11 +126,10 @@ print(perms)
   - pd.DataFrame: Data frame of results.
 
 
-## Running Tests, in correct file path 
+## Running Tests
 
 To run tests, run the following command
 
 ```bash
   python montecarlo_test.py 2> montecarlo_results.txt
 ```
-
