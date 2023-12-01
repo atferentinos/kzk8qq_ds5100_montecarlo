@@ -61,7 +61,17 @@ class TestAnalyzerMethods(unittest.TestCase):
         game = Game([die1, die2])
         game.play(5)
         analyzer = Analyzer(game)
+        self.assertIsInstance(analyzer.game, Game)
         
+    def test_jackpot(self):
+        test_faces = np.array([1, 2, 3, 4, 5, 6])
+        die1 = Die(test_faces)
+        die2 = Die(test_faces)
+        game = Game([die1, die2])
+        game.play(5)
+        analyzer = Analyzer(game)
+        self.assertEqual(type(analyzer.jackpot()), np.int64)
+ 
     def test_combo_faces(self):
         test_faces = np.array([1, 2, 3, 4, 5, 6])
         die1 = Die(test_faces)

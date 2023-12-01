@@ -1,5 +1,6 @@
 test_analyzer (__main__.TestAnalyzerMethods) ... ok
 test_combo_faces (__main__.TestAnalyzerMethods) ... ok
+test_jackpot (__main__.TestAnalyzerMethods) ... ok
 test_permutation_count (__main__.TestAnalyzerMethods) ... ok
 test_rolled_event (__main__.TestAnalyzerMethods) ... ok
 test_change_weight (__main__.TestDieMethods) ... ok
@@ -11,6 +12,6 @@ test_play (__main__.TestGameMethods) ... ok
 test_play_results (__main__.TestGameMethods) ... ok
 
 ----------------------------------------------------------------------
-Ran 11 tests in 0.040s
+Ran 12 tests in 0.041s
 
 OK

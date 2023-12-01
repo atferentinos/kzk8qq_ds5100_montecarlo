@@ -9,7 +9,7 @@ class Die:
     A class, changing faces and weights.
 
     Attributes:
-    - faces (np.array): Array of faces of the die.
+    - faces(N) (np.array): Array of faces of the die.
     - _data (pd.DataFrame): Private data frame that stores the die weights.
     """
     def __init__(self, N):
@@ -17,7 +17,7 @@ class Die:
         Initializes a Die with face data.
 
         Args:
-        - faces (np.array): Array of faces of the die..
+        - faces(N) (np.array): Array of faces of the die..
 
         Raised errors:
         - TypeError: Throws a TypeError if not a Numpy array.
@@ -36,7 +36,7 @@ class Die:
         A method to change the weight of a single side.
 
         Args:
-        - face: face value to be changed.
+        - face(N): face value to be changed.
         - new_weight: the weight of face value that was changed.
 
         Raises:
